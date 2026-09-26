@@ -612,7 +612,7 @@ function configureApp (app: ReturnType<typeof express>, seq: typeof sequelize) {
   }
 
   /* Custom Restful API */
-  app.post('/rest/user/login', login())
+  app.post('/rest/user/login', rateLimit({ windowMs: 5 * 60 * 1000, max: 5, message: { error: 'Too many login attempts. Please try again later.' }, standardHeaders: true, legacyHeaders: false }), login())
   app.get('/rest/user/change-password', utils.asyncHandler(changePassword()))
   app.post('/rest/user/reset-password', utils.asyncHandler(resetPassword()))
   app.get('/rest/user/security-question', utils.asyncHandler(securityQuestion()))
